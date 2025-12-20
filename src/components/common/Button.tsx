@@ -1,0 +1,31 @@
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "outline";
+  size?: "sm" | "md" | "lg";
+}
+
+export default function Button({
+  variant = "primary",
+  size = "md",
+  className,
+  ...props
+}: ButtonProps) {
+  const baseStyles =
+    "inline-flex items-center justify-center rounded-lg font-medium transition-colors";
+  const variants = {
+    primary: "bg-black text-white hover:bg-gray-800",
+    secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+    outline: "border border-gray-300 bg-transparent hover:bg-gray-50",
+  };
+  const sizes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-6 py-3 text-base",
+    lg: "px-8 py-4 text-lg",
+  };
+
+  return (
+    <button
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...props}
+    />
+  );
+}
