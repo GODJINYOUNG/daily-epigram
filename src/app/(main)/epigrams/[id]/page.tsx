@@ -1,72 +1,76 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
-import { useEpigramDetail } from "@/hooks/queries/useEpigrams"; // 1. 정상적으로 내보낸 훅 임포트
+import { useComments, useCreateComment } from "@/hooks/queries/useComments";
 import Button from "@/components/common/Button";
 
 export default function EpigramDetailPage() {
-  const params = useParams();
-  const id = params.id as string;
+  const { id } = useParams() as { id: string };
+  const [commentContent, setCommentContent] = useState("");
 
-  const { data: epigram, isLoading, isError } = useEpigramDetail(id);
+  const { data: comments, isLoading } = useComments(id);
+  const { mutate: createComment, isPending } = useCreateComment(id);
 
-  if (isLoading)
-    return (
-      <div className="p-20 text-center text-gray-500">
-        에피그램을 불러오는 중...
-      </div>
-    );
-  if (isError || !epigram)
-    return (
-      <div className="p-20 text-center text-red-500">
-        에피그램을 찾을 수 없습니다.
-      </div>
-    );
+  const handleCommentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentContent.trim()) return;
+
+    createComment(commentContent, {
+      onSuccess: () => setCommentContent(""), // 성공 시 입력창 비우기
+    });
+  };
 
   return (
     <div className="max-w-2xl mx-auto py-16 px-4">
-      {/* 에피그램 본문 섹션 */}
-      <article className="mb-12 border-b pb-12">
-        <h1 className="text-3xl font-serif italic mb-8 leading-relaxed text-gray-800">
-          "{epigram.content}"
-        </h1>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-2">
-            {/* 2. tag 파라미터에 string 타입을 명시하여 'any' 오류 해결 */}
-            {epigram.tags.map((tag: string) => (
-              <span
-                key={tag}
-                className="text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-          <p className="text-lg font-medium text-gray-600">
-            - {epigram.author}
-          </p>
-        </div>
-      </article>
+      {/* 에피그램 본문 영역 (기존 코드) */}
 
-      {/* 댓글 작성 섹션 */}
+      <hr className="my-12 border-gray-100" />
+
+      {/* 댓글 섹션 */}
       <section>
-        <h3 className="text-xl font-bold mb-6 text-gray-900">댓글</h3>
-        <div className="bg-gray-50 p-6 rounded-2xl mb-8 border border-gray-100">
-          <textarea
-            className="w-full bg-transparent outline-none resize-none text-gray-700"
-            placeholder="따뜻한 감상평을 남겨주세요."
-            rows={3}
-          />
-          <div className="flex justify-end mt-4">
-            <Button size="sm">댓글 등록</Button>
-          </div>
-        </div>
+        <h3 className="text-xl font-bold mb-6">댓글 {comments?.length || 0}</h3>
 
-        {/* 댓글 목록 영역 */}
-        <div className="space-y-4">
-          <p className="text-gray-400 text-sm text-center py-10 italic">
-            아직 댓글이 없습니다. 첫 번째 댓글의 주인공이 되어보세요!
-          </p>
+        {/* 댓글 입력창 */}
+        <form onSubmit={handleCommentSubmit} className="mb-10">
+          <textarea
+            className="w-full border border-gray-200 rounded-xl p-4 h-24 focus:ring-1 focus:ring-black outline-none transition-all resize-none"
+            placeholder="따뜻한 한마디를 남겨주세요."
+            value={commentContent}
+            onChange={(e) => setCommentContent(e.target.value)}
+          />
+          <div className="flex justify-end mt-2">
+            <Button disabled={isPending || !commentContent.trim()}>
+              {isPending ? "게시 중..." : "댓글 등록"}
+            </Button>
+          </div>
+        </form>
+
+        {/* 댓글 목록 */}
+        <div className="space-y-6">
+          {isLoading ? (
+            <p className="text-center text-gray-400">댓글 로딩 중...</p>
+          ) : comments?.length > 0 ? (
+            comments.map((comment: any) => (
+              <div key={comment.id} className="border-b border-gray-50 pb-6">
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold text-sm">
+                    {comment.writer?.nickname}
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  {comment.content}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-center py-10 text-gray-400">
+              첫 번째 댓글을 남겨보세요! ✍️
+            </p>
+          )}
         </div>
       </section>
     </div>

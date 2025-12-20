@@ -29,3 +29,18 @@ export const createEpigram = async (epigramData: {
   const response = await axiosInstance.post("/epigrams", epigramData);
   return response.data;
 };
+// ... 기존 에피그램 관련 함수들 (getEpigrams, getEpigramById, createEpigram)
+
+// 댓글 목록 조회
+export const getComments = async (epigramId: string) => {
+  const response = await axiosInstance.get(`/epigrams/${epigramId}/comments`);
+  return response.data;
+};
+
+// 댓글 등록
+export const createComment = async (epigramId: string, content: string) => {
+  const response = await axiosInstance.post(`/epigrams/${epigramId}/comments`, {
+    content,
+  });
+  return response.data;
+};
