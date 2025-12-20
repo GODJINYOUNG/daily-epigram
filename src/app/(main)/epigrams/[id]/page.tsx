@@ -1,12 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEpigramDetail } from "@/hooks/queries/useEpigrams";
+import { useEpigramDetail } from "@/hooks/queries/useEpigrams"; // 1. 정상적으로 내보낸 훅 임포트
 import Button from "@/components/common/Button";
 
 export default function EpigramDetailPage() {
   const params = useParams();
-  const id = params.id as string; // URL의 [id] 값을 가져옴
+  const id = params.id as string;
 
   const { data: epigram, isLoading, isError } = useEpigramDetail(id);
 
@@ -25,14 +25,15 @@ export default function EpigramDetailPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-16 px-4">
-      {/* 에피그램 본문 */}
+      {/* 에피그램 본문 섹션 */}
       <article className="mb-12 border-b pb-12">
         <h1 className="text-3xl font-serif italic mb-8 leading-relaxed text-gray-800">
           "{epigram.content}"
         </h1>
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
-            {epigram.tags.map((tag) => (
+            {/* 2. tag 파라미터에 string 타입을 명시하여 'any' 오류 해결 */}
+            {epigram.tags.map((tag: string) => (
               <span
                 key={tag}
                 className="text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded"
@@ -47,7 +48,7 @@ export default function EpigramDetailPage() {
         </div>
       </article>
 
-      {/* 댓글 섹션 */}
+      {/* 댓글 작성 섹션 */}
       <section>
         <h3 className="text-xl font-bold mb-6 text-gray-900">댓글</h3>
         <div className="bg-gray-50 p-6 rounded-2xl mb-8 border border-gray-100">
@@ -61,7 +62,7 @@ export default function EpigramDetailPage() {
           </div>
         </div>
 
-        {/* 댓글 리스트 예시 (데이터 연결 전) */}
+        {/* 댓글 목록 영역 */}
         <div className="space-y-4">
           <p className="text-gray-400 text-sm text-center py-10 italic">
             아직 댓글이 없습니다. 첫 번째 댓글의 주인공이 되어보세요!
