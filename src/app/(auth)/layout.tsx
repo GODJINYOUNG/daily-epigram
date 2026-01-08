@@ -2,10 +2,6 @@
 
 import { AuthProvider } from "@/contexts/AuthContext";
 
-/**
- * (auth) 그룹 내의 페이지(로그인, 회원가입)에 공통으로 적용되는 레이아웃입니다.
- * 최상위 layout.tsx에 html, body가 이미 있으므로 여기서는 레이아웃 스타일만 정의합니다.
- */
 export default function AuthLayout({
   children,
 }: {

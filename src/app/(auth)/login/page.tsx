@@ -1,95 +1,131 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
-import axiosInstance from "@/services/api/axiosInstance";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const { login } = useAuth(); // Context에서 login 함수 가져오기
   const router = useRouter();
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 1. 실시간 유효성 검사
+  useEffect(() => {
+    const newErrors = { email: "", password: "" };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = "올바른 이메일 형식이 아닙니다.";
+    }
+    if (formData.password && formData.password.length < 8) {
+      newErrors.password = "비밀번호는 8자 이상이어야 합니다.";
+    }
+
+    setErrors(newErrors);
+
+    // 버튼 활성화 조건 (이메일 형식 맞고, 비밀번호 8자 이상)
+    setIsFormValid(
+      emailRegex.test(formData.email) && formData.password.length >= 8
+    );
+  }, [formData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // 2. 로그인 제출 로직
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    if (!isFormValid || isLoading) return;
 
+    setIsLoading(true);
     try {
-      // 1. 로그인 API 호출 (실제 API 엔드포인트에 맞게 조정하세요)
       const response = await axiosInstance.post("/auth/login", {
-        email,
-        password,
+        email: formData.email,
+        password: formData.password,
       });
 
+      // 서버로부터 받은 토큰 저장 (accessToken, refreshToken 등)
       const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
 
-      // 2. AuthContext의 login 함수 호출 (로컬스토리지 저장 및 상태 업데이트)
-      login(accessToken);
-
-      // 3. 로그인 성공 후 피드 페이지로 이동
-      router.push("/feed");
-      router.refresh(); // 페이지 상태를 최신화하기 위해 새로고침 유도
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message ||
-          "로그인에 실패했습니다. 다시 시도해주세요."
-      );
+      // 성공 메시지 후 메인 페이지 이동
+      alert("로그인에 성공했습니다!");
+      router.push("/");
+      router.refresh(); // 페이지 전체를 새로고침하여 로그인 상태 반영
+    } catch (error: any) {
+      // 로그인 실패 시 포괄적인 에러 메시지
+      const message =
+        error.response?.data?.message || "아이디 또는 비밀번호를 확인해주세요.";
+      setErrors((prev) => ({ ...prev, email: message }));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-20 px-4">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-900">
-        로그인
-      </h1>
+    <div className="w-full">
+      <h2 className="text-2xl font-bold text-center mb-8">로그인</h2>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium mb-1.5 text-gray-700">
+            이메일
+          </label>
+          <Input
+            name="email"
+            type="email"
+            placeholder="example@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            className={errors.email ? "border-red-500" : ""}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>
+          )}
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Input
-          label="이메일"
-          type="email"
-          placeholder="example@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <Input
-          label="비밀번호"
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium mb-1.5 text-gray-700">
+            비밀번호
+          </label>
+          <Input
+            name="password"
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            value={formData.password}
+            onChange={handleChange}
+            className={errors.password ? "border-red-500" : ""}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1.5">{errors.password}</p>
+          )}
+        </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <Button
+        <button
           type="submit"
-          className="w-full h-12 text-lg"
-          disabled={isLoading}
+          disabled={!isFormValid || isLoading}
+          className={`w-full py-3.5 rounded-xl font-bold transition-all ${
+            isFormValid && !isLoading
+              ? "bg-black text-white hover:bg-gray-800"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+          }`}
         >
           {isLoading ? "로그인 중..." : "로그인"}
-        </Button>
-      </form>
-
-      <p className="mt-6 text-center text-gray-500 text-sm">
-        계정이 없으신가요?{" "}
-        <button
-          onClick={() => router.push("/signup")}
-          className="text-black font-semibold underline"
-        >
-          회원가입 하기
         </button>
-      </p>
+      </form>
     </div>
   );
 }
