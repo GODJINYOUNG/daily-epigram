@@ -1,74 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { EpigramCard } from "@/components/epigram";
 import { Epigram } from "@/types/epigram";
-import { EpigramCard, EpigramCardSkeleton } from "@/components/epigram";
-import { useDebounce } from "@/hooks/useDebounce";
 
-export default function SearchPage() {
-  const [keyword, setKeyword] = useState<string>("");
-  const [results, setResults] = useState<Epigram[]>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false); // 로딩 상태 추가
+// 예시 데이터 (실제 데이터와 연결 전 확인용)
+const MOCK_DATA: Epigram[] = [
+  {
+    id: 1,
+    content:
+      "결국 모든 것은 끝이 있다. 하지만 그것이 새로운 시작을 의미하기도 한다.",
+    author: "무명",
+    tags: ["인생", "희망"],
+    likeCount: 12,
+  },
+  {
+    id: 2,
+    content: "어제보다 나은 오늘의 내가 되는 것, 그것만으로도 충분하다.",
+    author: "지혜",
+    tags: ["자기계발"],
+    likeCount: 24,
+  },
+];
 
-  const debouncedKeyword = useDebounce(keyword, 500);
-
-  useEffect(() => {
-    // 검색어가 없으면 결과를 비우고 종료
-    if (!debouncedKeyword.trim()) {
-      setResults([]);
-      return;
-    }
-
-    const fetchSearch = async () => {
-      setIsFetching(true); // 로딩 시작
-      try {
-        // 실제 프로젝트의 API 주소로 변경하세요
-        const response = await fetch(
-          `/api/epigrams?search=${debouncedKeyword}`
-        );
-        const data = await response.json();
-
-        // 데이터가 Epigram[] 형태라고 가정 (API 구조에 따라 data.list 등으로 수정 필요)
-        setResults(data);
-      } catch (error) {
-        console.error("검색 실패:", error);
-      } finally {
-        setIsFetching(false); // 로딩 종료
-      }
-    };
-
-    fetchSearch();
-  }, [debouncedKeyword]);
-
+export default function FeedPage() {
   return (
-    <div className="p-8">
-      <input
-        type="text"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        className="w-full p-3 border rounded text-black mb-8"
-        placeholder="검색어를 입력하세요..."
-      />
-
-      <div className="grid gap-4">
-        {/* 로딩 중일 때는 스켈레톤 3개를 보여줌 */}
-        {isFetching ? (
-          <>
-            <EpigramCardSkeleton />
-            <EpigramCardSkeleton />
-            <EpigramCardSkeleton />
-          </>
-        ) : (
-          // 로딩이 끝났을 때 결과 출력
-          results.map((item: Epigram) => (
+    <div className="min-h-screen bg-[#f8f9fa] px-4 py-12">
+      <div className="mx-auto max-w-2xl">
+        {" "}
+        {/* 👈 핵심: 최대 너비를 제한하여 모바일 앱 느낌을 줌 */}
+        <header className="mb-10 text-center">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+            Today's Feed
+          </h1>
+          <p className="mt-2 text-gray-500">
+            오늘 당신의 마음을 울리는 문장을 찾아보세요.
+          </p>
+        </header>
+        <div className="grid gap-6">
+          {MOCK_DATA.map((item) => (
             <EpigramCard key={item.id} data={item} />
-          ))
-        )}
-
-        {/* 결과가 없을 때의 처리 */}
-        {!isFetching && debouncedKeyword && results.length === 0 && (
-          <p className="text-center text-gray-500">검색 결과가 없습니다.</p>
-        )}
+          ))}
+        </div>
       </div>
     </div>
   );
