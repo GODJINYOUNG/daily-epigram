@@ -1,39 +1,74 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// 1. useEpigrams를 useInfiniteEpigrams로 변경
-import { useInfiniteEpigrams } from "@/hooks/queries/useEpigrams";
-import Input from "@/components/common/Input";
-import EpigramCard from "@/components/common/EpigramCard"; // 카드 컴포넌트 임포트 확인
+import { Epigram } from "@/types/epigram";
+import { EpigramCard, EpigramCardSkeleton } from "@/components/epigram";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [keyword, setKeyword] = useState<string>("");
+  const [results, setResults] = useState<Epigram[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false); // 로딩 상태 추가
+
+  const debouncedKeyword = useDebounce(keyword, 500);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchTerm), 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
+    // 검색어가 없으면 결과를 비우고 종료
+    if (!debouncedKeyword.trim()) {
+      setResults([]);
+      return;
+    }
 
-  // 2. useEpigrams() 대신 useInfiniteEpigrams() 호출
-  const { data, status } = useInfiniteEpigrams(debouncedSearch);
+    const fetchSearch = async () => {
+      setIsFetching(true); // 로딩 시작
+      try {
+        // 실제 프로젝트의 API 주소로 변경하세요
+        const response = await fetch(
+          `/api/epigrams?search=${debouncedKeyword}`
+        );
+        const data = await response.json();
+
+        // 데이터가 Epigram[] 형태라고 가정 (API 구조에 따라 data.list 등으로 수정 필요)
+        setResults(data);
+      } catch (error) {
+        console.error("검색 실패:", error);
+      } finally {
+        setIsFetching(false); // 로딩 종료
+      }
+    };
+
+    fetchSearch();
+  }, [debouncedKeyword]);
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">검색</h1>
-      <Input
+    <div className="p-8">
+      <input
+        type="text"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        className="w-full p-3 border rounded text-black mb-8"
         placeholder="검색어를 입력하세요..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      <div className="mt-10 space-y-6">
-        {status === "success" &&
-          data?.pages.map((page) =>
-            page.list.map((epigram: any) => (
-              <EpigramCard key={epigram.id} epigram={epigram} />
-            ))
-          )}
+      <div className="grid gap-4">
+        {/* 로딩 중일 때는 스켈레톤 3개를 보여줌 */}
+        {isFetching ? (
+          <>
+            <EpigramCardSkeleton />
+            <EpigramCardSkeleton />
+            <EpigramCardSkeleton />
+          </>
+        ) : (
+          // 로딩이 끝났을 때 결과 출력
+          results.map((item: Epigram) => (
+            <EpigramCard key={item.id} data={item} />
+          ))
+        )}
+
+        {/* 결과가 없을 때의 처리 */}
+        {!isFetching && debouncedKeyword && results.length === 0 && (
+          <p className="text-center text-gray-500">검색 결과가 없습니다.</p>
+        )}
       </div>
     </div>
   );

@@ -3,11 +3,24 @@ export interface Epigram {
   content: string;
   author: string;
   tags: string[];
-  emotion: "happy" | "sad" | "angry" | "surprised"; // 시안에 있던 감정 상태 반영
-  createdAt: string;
 }
 
 export interface EpigramListResponse {
   list: Epigram[];
   totalCount: number;
+}
+
+export interface CreateEpigramRequest {
+  content: string;
+  author: string;
+  tags: string[];
+}
+
+export interface Epigram {
+  id: number;
+  content: string;
+  author: string;
+  tags: string[];
+  likeCount: number; // 좋아요 수
+  isLiked?: boolean; // 내가 좋아요를 눌렀는지 여부 (선택사항)
 }

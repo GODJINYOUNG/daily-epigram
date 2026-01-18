@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/common/Input";
-import axiosInstance from "@/lib/axiosInstance"; // axios 인스턴스 경로 확인 필요
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function SignUpPage() {
   const router = useRouter();
