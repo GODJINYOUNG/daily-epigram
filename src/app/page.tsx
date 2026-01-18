@@ -1,84 +1,62 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function LandingPage() {
-  const { isLoggedIn } = useAuth();
-
   return (
-    <div className="bg-white text-black">
-      {/* 1. 히어로 섹션: 첫 인상 */}
-      <section className="relative h-[90vh] flex flex-col items-center justify-center px-4 text-center overflow-hidden">
-        {/* 배경 장식 요소 (선택사항) */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gray-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+    <div className="min-h-screen bg-[#F8FAFC]">
+      {/* 네비게이션 간격 확대 */}
+      <nav className="flex items-center justify-between px-10 py-10 max-w-7xl mx-auto">
+        <span className="text-3xl font-[1000] text-[#0F172A] tracking-tighter italic">
+          Epigram.
+        </span>
+        <Link
+          href="/login"
+          className="text-lg font-bold text-[#475569] hover:text-blue-600 transition-colors"
+        >
+          로그인
+        </Link>
+      </nav>
 
-        <h1 className="text-5xl md:text-7xl font-serif italic mb-6 animate-fade-in-up">
-          Daily Epigram
+      {/* 메인 섹션 여백(pt-32) 대폭 추가 */}
+      <main className="flex flex-col items-center justify-center pt-32 pb-40 px-6 text-center">
+        <div className="inline-block px-6 py-2 mb-10 rounded-full bg-white shadow-sm border border-slate-100 text-[#3B82F6] text-sm font-extrabold tracking-widest uppercase">
+          Daily Insight
+        </div>
+
+        <h1 className="text-[64px] md:text-[90px] font-[1000] text-[#0F172A] leading-[1.05] tracking-tight mb-12">
+          평범한 일상을
+          <br />
+          <span className="text-[#3B82F6]">특별한 문장으로</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-lg leading-relaxed animate-fade-in-up delay-200">
-          "오늘 당신의 마음을 스쳐 지나간 문장이 누군가에게는 내일의 용기가 될
-          수 있습니다."
+
+        <p className="text-[#64748B] text-xl md:text-2xl font-medium max-w-[700px] mb-16 leading-relaxed">
+          어제보다 나은 오늘을 기록하는 가장 세련된 방법.
+          <br className="hidden md:block" />
+          당신만의 에피그램을 지금 바로 시작해보세요.
         </p>
 
-        <div className="flex gap-4 animate-fade-in-up delay-500">
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-[460px]">
           <Link
-            href="/feed"
-            className="px-8 py-4 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl"
+            href="/signup"
+            className="flex-1 h-20 flex items-center justify-center rounded-[24px] bg-[#0F172A] text-white text-xl font-black shadow-2xl hover:bg-slate-800 hover:-translate-y-1.5 transition-all"
           >
-            피드 둘러보기
+            시작하기
           </Link>
-          {!isLoggedIn && (
-            <Link
-              href="/signup"
-              className="px-8 py-4 border border-black rounded-full font-bold hover:bg-gray-50 transition-all"
-            >
-              지금 시작하기
-            </Link>
-          )}
+          <Link
+            href="/login"
+            className="flex-1 h-20 flex items-center justify-center rounded-[24px] bg-white text-[#0F172A] text-xl font-black border-2 border-slate-100 hover:bg-slate-50 hover:-translate-y-1.5 transition-all"
+          >
+            로그인
+          </Link>
         </div>
-      </section>
 
-      {/* 2. 핵심 기능 소개 섹션 */}
-      <section className="py-24 bg-gray-50 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
-          <div className="text-center">
-            <div className="text-4xl mb-4">✍️</div>
-            <h3 className="text-xl font-bold mb-2">간편한 기록</h3>
-            <p className="text-gray-500">
-              잊고 싶지 않은 문장을 단 몇 초 만에 기록하세요.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl mb-4">🌱</div>
-            <h3 className="text-xl font-bold mb-2">영감의 공유</h3>
-            <p className="text-gray-500">
-              다양한 사람들의 생각을 읽으며 새로운 영감을 얻으세요.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl mb-4">💬</div>
-            <h3 className="text-xl font-bold mb-2">따뜻한 소통</h3>
-            <p className="text-gray-500">
-              댓글을 통해 문장에 담긴 깊은 의미를 함께 나눠보세요.
-            </p>
-          </div>
+        {/* 하단 데코레이션 요소와 간격 확대 */}
+        <div className="mt-40 w-full max-w-[900px] opacity-40">
+          <hr className="border-slate-200" />
         </div>
-      </section>
-
-      {/* 3. 푸터 직전 CTA 섹션 */}
-      <section className="py-24 px-4 text-center border-t border-gray-100">
-        <h2 className="text-3xl font-bold mb-6">
-          오늘의 생각을 남길 준비가 되셨나요?
-        </h2>
-        <Link
-          href={isLoggedIn ? "/epigrams/add" : "/login"}
-          className="inline-block text-black border-b-2 border-black pb-1 font-bold text-lg hover:text-gray-600 hover:border-gray-600 transition-all"
-        >
-          에피그램 등록하러 가기 &rarr;
-        </Link>
-      </section>
+      </main>
     </div>
   );
 }

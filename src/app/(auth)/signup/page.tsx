@@ -6,25 +6,22 @@ import Link from "next/link";
 export default function SignUpPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] p-6">
-      {/* 카드: 패딩을 조절하고 최대 너비를 최적화하여 꼬임 방지 */}
-      <div className="w-full max-w-[420px] rounded-[40px] bg-white p-8 md:p-12 shadow-[0_15px_50px_-10px_rgba(0,0,0,0.04)] border border-slate-100">
-        {/* 헤더: 간결하고 임팩트 있게 */}
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-[1000] text-[#0F172A] tracking-tight">
+      <div className="w-full max-w-[440px] rounded-[50px] bg-white p-10 md:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-white">
+        <div className="mb-14 text-center">
+          <h1 className="text-[36px] font-[1000] text-[#0F172A] tracking-tight">
             시작하기
           </h1>
-          <p className="mt-3 text-slate-400 font-medium text-base">
-            나만의 에피그램을 기록해보세요
+          <p className="mt-4 text-slate-400 font-medium text-lg">
+            나만의 에피그램을 시작해보세요
           </p>
         </div>
 
-        {/* 폼 간격(space-y-5)을 조정하여 가독성 확보 */}
-        <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-7" onSubmit={(e) => e.preventDefault()}>
           {[
             {
               label: "이메일",
               type: "email",
-              placeholder: "example@email.com",
+              placeholder: "이메일을 입력해주세요",
             },
             {
               label: "닉네임",
@@ -34,39 +31,41 @@ export default function SignUpPage() {
             {
               label: "비밀번호",
               type: "password",
-              placeholder: "8자 이상 입력",
+              placeholder: "비밀번호를 입력해주세요",
             },
             {
               label: "비밀번호 확인",
               type: "password",
-              placeholder: "비밀번호 다시 입력",
+              placeholder: "비밀번호를 다시 입력해주세요",
             },
           ].map((field) => (
-            <div key={field.label} className="flex flex-col gap-2">
-              <label className="ml-1 text-[13px] font-bold text-slate-500 uppercase tracking-wider">
+            <div key={field.label} className="flex flex-col gap-3">
+              <label className="ml-1 text-[15px] font-bold text-slate-600">
                 {field.label}
               </label>
               <input
                 type={field.type}
                 placeholder={field.placeholder}
-                className="w-full h-14 rounded-2xl border-2 border-[#F8FAFC] bg-[#F8FAFC] px-5 text-slate-900 placeholder:text-slate-300 outline-none transition-all focus:border-blue-500 focus:bg-white text-base"
+                className="w-full h-15 rounded-2xl bg-[#F8FAFC] px-6 text-slate-900 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all"
               />
             </div>
           ))}
 
-          {/* 버튼: 텍스트 크기와 높이 밸런스 조정 */}
-          <button className="mt-6 w-full h-14 rounded-2xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all">
-            가입하기
-          </button>
+          {/* 버튼 상단 여백(pt-6)을 추가하여 비밀번호 확인창과의 간격을 확보 */}
+          <div className="pt-6">
+            <button className="w-full h-16 rounded-2xl bg-[#3B82F6] text-xl font-extrabold text-white shadow-xl shadow-blue-100 hover:bg-[#2563EB] active:scale-95 transition-all">
+              가입하기
+            </button>
+          </div>
         </form>
 
-        <div className="mt-10 text-center">
-          <span className="text-sm text-slate-400 font-medium">
+        <div className="mt-12 text-center">
+          <span className="text-slate-400 font-medium">
             이미 계정이 있나요?{" "}
           </span>
           <Link
             href="/login"
-            className="text-sm font-bold text-blue-600 hover:underline underline-offset-4"
+            className="font-bold text-[#3B82F6] hover:underline underline-offset-4 ml-1"
           >
             로그인하기
           </Link>
