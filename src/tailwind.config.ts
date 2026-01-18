@@ -1,12 +1,21 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  // content 부분이 가장 중요합니다. 괄호()가 포함된 폴더까지 다 읽으라는 설정입니다.
   content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}", // 이 줄이 있으면 (auth), (main) 모두 다 읽습니다.
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+    },
   },
   plugins: [],
 };
+
 export default config;
