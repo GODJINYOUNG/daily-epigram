@@ -2,41 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Next.js 기본 배경색 초기화 및 폰트 설정 */
 :root {
-  --background: #f9fafb;
-  --foreground: #111827;
+  --foreground-rgb: 15, 23, 42; /* slate-900 */
+  --background-rgb: 248, 250, 252; /* slate-50 */
+}
+
+/* 시스템 설정에 따른 다크모드 강제 적용 해제 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 15, 23, 42;
+    --background-rgb: 248, 250, 252;
+  }
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  /* 한글이 가장 예쁘게 보이는 폰트 시스템 적용 */
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 기존에 쓰시던 애니메이션은 유지하고 싶다면 아래에 남겨두셔도 좋습니다 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.delay-200 {
-  animation-delay: 0.2s;
-}
-.delay-500 {
-  animation-delay: 0.5s;
+/* 부드러운 스크롤 */
+html {
+  scroll-behavior: smooth;
 }
