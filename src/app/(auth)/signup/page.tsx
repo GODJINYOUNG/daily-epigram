@@ -5,16 +5,12 @@ import Link from "next/link";
 export default function SignupPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
-      {/* 1. 로고 추가 및 중앙 배치 */}
-      <div className="mb-10 scale-110">
+      <div className="mb-12 scale-110">
         <Logo />
       </div>
 
       <div className="w-full max-w-[420px] p-2">
-        <h2 className="text-2xl font-black text-[#2B2B2B] mb-8 text-center italic">
-          Join Epigram.
-        </h2>
-
+        {/* Join 텍스트 제거됨 */}
         <form className="space-y-5">
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-800 ml-1">
@@ -23,7 +19,7 @@ export default function SignupPage() {
             <input
               type="email"
               placeholder="이메일을 입력해주세요"
-              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-slate-200 outline-none transition-all text-[#2B2B2B]"
+              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 outline-none text-[#2B2B2B]"
             />
           </div>
 
@@ -33,8 +29,8 @@ export default function SignupPage() {
             </label>
             <input
               type="text"
-              placeholder="사용하실 닉네임을 입력해주세요"
-              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-slate-200 outline-none transition-all text-[#2B2B2B]"
+              placeholder="닉네임을 입력해주세요"
+              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 outline-none text-[#2B2B2B]"
             />
           </div>
 
@@ -45,7 +41,19 @@ export default function SignupPage() {
             <input
               type="password"
               placeholder="비밀번호를 입력해주세요"
-              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-slate-200 outline-none transition-all text-[#2B2B2B]"
+              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 outline-none text-[#2B2B2B]"
+            />
+          </div>
+
+          {/* 비밀번호 확인 칸 추가 */}
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-slate-800 ml-1">
+              비밀번호 확인
+            </label>
+            <input
+              type="password"
+              placeholder="비밀번호를 다시 입력해주세요"
+              className="w-full h-14 px-6 rounded-2xl bg-slate-50 border border-slate-100 outline-none text-[#2B2B2B]"
             />
           </div>
 
@@ -64,7 +72,6 @@ export default function SignupPage() {
           </Link>
         </div>
       </div>
-      <div className="h-20" />
     </div>
   );
 }
