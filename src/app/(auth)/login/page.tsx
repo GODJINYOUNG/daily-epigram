@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Logo } from "@/components/common/Logo";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,22 +8,14 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      // 💡 타입 에러 우회를 위해 as any를 일시적으로 사용합니다.
-      // 프로젝트의 login 함수 정의에 따라 email, password를 객체로 보냅니다.
       await (login as any)({ email, password });
-
-      // 로그인 성공 시 로컬 스토리지에 토큰이 저장되는 시간을 벌어주기 위해 미세한 지연 후 이동
-      setTimeout(() => {
-        router.push("/main");
-        router.refresh();
-      }, 100);
+      // push 대신 href를 사용해 전체 상태를 새로고침하며 이동 (상단바 갱신용)
+      window.location.href = "/main";
     } catch (error) {
       console.error("Login failed:", error);
       alert("로그인 정보가 올바르지 않습니다.");
@@ -32,7 +23,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col items-center justify-center px-6">
+    <div className="h-full flex flex-col items-center justify-center py-20 px-6">
       <div className="w-full max-w-[420px] bg-white rounded-[32px] p-10 md:p-14 shadow-sm border border-slate-100">
         <div className="mb-10 flex justify-center scale-110">
           <Logo />
