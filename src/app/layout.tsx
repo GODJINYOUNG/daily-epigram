@@ -16,10 +16,9 @@ export default function RootLayout({
 
   return (
     <html lang="ko">
-      <body>
+      <body className="bg-white">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            {/* 공통 헤더: z-50과 bg-white를 확실히 주어 겹침 방지 */}
             <nav className="h-20 px-6 md:px-10 flex items-center justify-between border-b border-slate-50 bg-white sticky top-0 z-[100]">
               <div className="scale-90 origin-left">
                 <Link href="/">
@@ -29,21 +28,21 @@ export default function RootLayout({
               <div className="flex gap-4">
                 <Link
                   href="/login"
-                  className="text-sm font-bold text-slate-600 px-4 py-2"
+                  className="text-sm font-bold text-slate-600 px-4 py-2 hover:text-black"
                 >
                   로그인
                 </Link>
                 <Link
                   href="/signup"
-                  className="text-sm font-bold bg-[#2B2B2B] text-white px-5 py-2 rounded-xl"
+                  className="text-sm font-bold bg-[#2B2B2B] text-white px-5 py-2 rounded-xl hover:bg-black transition-colors"
                 >
                   시작하기
                 </Link>
               </div>
             </nav>
 
-            {/* 실제 페이지 내용 */}
-            <main>{children}</main>
+            {/* 겹침 방지를 위해 min-h 설정 */}
+            <main className="min-h-[calc(100vh-80px)]">{children}</main>
           </AuthProvider>
         </QueryClientProvider>
       </body>
