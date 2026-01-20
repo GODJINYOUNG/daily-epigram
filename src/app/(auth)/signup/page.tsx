@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function SignUpPage() {
   const router = useRouter();
 
-  // 상태 관리
+  // 입력값 상태
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -24,8 +24,8 @@ export default function SignUpPage() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 유효성 검사 로직
-    let newErrors = {
+    // 유효성 검증 로직
+    const newErrors = {
       email: "",
       nickname: "",
       password: "",
@@ -34,11 +34,11 @@ export default function SignUpPage() {
     let isValid = true;
 
     if (!email.includes("@")) {
-      newErrors.email = "올바른 이메일 형식이 아닙니다.";
+      newErrors.email = "올바른 이메일 형식을 입력해주세요.";
       isValid = false;
     }
-    if (nickname.length < 2) {
-      newErrors.nickname = "닉네임은 2자 이상이어야 합니다.";
+    if (nickname.trim().length < 2) {
+      newErrors.nickname = "닉네임은 2자 이상 입력해주세요.";
       isValid = false;
     }
     if (password.length < 8) {
@@ -53,21 +53,24 @@ export default function SignUpPage() {
     setErrors(newErrors);
 
     if (isValid) {
-      // 모든 규정에 맞을 때만 진행
+      alert("회원가입 성공!");
       router.push("/login");
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] p-6">
-      <div className="w-full max-w-[460px] rounded-[48px] bg-white p-10 md:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-white">
+      <div className="w-full max-w-[460px] rounded-[50px] bg-white p-10 md:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-white">
         <div className="mb-12 text-center">
-          <h1 className="text-[36px] font-[1000] text-[#0F172A] tracking-tighter">
+          <h1 className="text-[36px] font-[1000] text-[#0F172A] tracking-tighter italic">
             시작하기
           </h1>
+          <p className="mt-3 text-slate-400 font-medium">
+            나만의 에피그램을 시작해보세요
+          </p>
         </div>
 
-        <form onSubmit={handleSignUp} className="space-y-5">
+        <form onSubmit={handleSignUp} className="space-y-6">
           {/* 이메일 */}
           <div className="flex flex-col gap-2">
             <label className="ml-1 text-[14px] font-bold text-slate-700">
@@ -78,14 +81,14 @@ export default function SignUpPage() {
               placeholder="이메일을 입력해주세요"
               className={`w-full h-15 rounded-2xl bg-[#F8FAFC] px-6 border-2 outline-none transition-all ${
                 errors.email
-                  ? "border-red-400"
+                  ? "border-red-500 bg-red-50/30"
                   : "border-transparent focus:border-blue-500 focus:bg-white"
               }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             {errors.email && (
-              <p className="ml-2 text-sm font-medium text-red-500">
+              <p className="ml-2 text-[13px] font-semibold text-red-500">
                 {errors.email}
               </p>
             )}
@@ -101,14 +104,14 @@ export default function SignUpPage() {
               placeholder="닉네임을 입력해주세요"
               className={`w-full h-15 rounded-2xl bg-[#F8FAFC] px-6 border-2 outline-none transition-all ${
                 errors.nickname
-                  ? "border-red-400"
+                  ? "border-red-500 bg-red-50/30"
                   : "border-transparent focus:border-blue-500 focus:bg-white"
               }`}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />
             {errors.nickname && (
-              <p className="ml-2 text-sm font-medium text-red-500">
+              <p className="ml-2 text-[13px] font-semibold text-red-500">
                 {errors.nickname}
               </p>
             )}
@@ -124,14 +127,14 @@ export default function SignUpPage() {
               placeholder="8자 이상 입력해주세요"
               className={`w-full h-15 rounded-2xl bg-[#F8FAFC] px-6 border-2 outline-none transition-all ${
                 errors.password
-                  ? "border-red-400"
+                  ? "border-red-500 bg-red-50/30"
                   : "border-transparent focus:border-blue-500 focus:bg-white"
               }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             {errors.password && (
-              <p className="ml-2 text-sm font-medium text-red-500">
+              <p className="ml-2 text-[13px] font-semibold text-red-500">
                 {errors.password}
               </p>
             )}
@@ -147,14 +150,14 @@ export default function SignUpPage() {
               placeholder="비밀번호를 다시 입력해주세요"
               className={`w-full h-15 rounded-2xl bg-[#F8FAFC] px-6 border-2 outline-none transition-all ${
                 errors.confirmPassword
-                  ? "border-red-400"
+                  ? "border-red-500 bg-red-50/30"
                   : "border-transparent focus:border-blue-500 focus:bg-white"
               }`}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             {errors.confirmPassword && (
-              <p className="ml-2 text-sm font-medium text-red-500">
+              <p className="ml-2 text-[13px] font-semibold text-red-500">
                 {errors.confirmPassword}
               </p>
             )}
@@ -162,18 +165,18 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            className="mt-8 w-full h-16 rounded-2xl bg-[#3B82F6] text-lg font-black text-white shadow-xl shadow-blue-100 hover:bg-[#2563EB] active:scale-95 transition-all"
+            className="mt-10 w-full h-16 rounded-2xl bg-[#3B82F6] text-lg font-black text-white shadow-xl shadow-blue-100 hover:bg-[#2563EB] active:scale-[0.97] transition-all"
           >
             가입하기
           </button>
         </form>
 
         <div className="mt-10 text-center">
-          <p className="text-slate-400 font-medium italic">
+          <p className="text-slate-400 font-medium">
             이미 계정이 있나요?{" "}
             <Link
               href="/login"
-              className="font-bold text-[#3B82F6] ml-1 not-italic"
+              className="font-bold text-[#3B82F6] ml-2 hover:underline"
             >
               로그인하기
             </Link>
