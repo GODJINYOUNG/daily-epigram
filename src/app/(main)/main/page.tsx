@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Logo } from "@/components/common/Logo";
 
 interface Epigram {
   id: number;
@@ -40,30 +39,10 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {/* 2. 상단 네비바 로고 교체 및 정렬 */}
-      <nav className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 px-6 md:px-10 flex items-center justify-between">
-        <div className="flex items-center gap-6 md:gap-10">
-          <div className="scale-90 origin-left">
-            <Logo />
-          </div>
-          <div className="hidden md:flex gap-6 border-l border-slate-100 pl-10">
-            <span className="text-slate-800 font-black cursor-pointer italic tracking-tight">
-              Feed
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-full border border-slate-100">
-          <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 text-xs font-black">
-            👤
-          </div>
-          <span className="text-sm font-bold text-slate-700 italic">
-            User_Name
-          </span>
-        </div>
-      </nav>
+      {/* 네비게이션 바는 layout.tsx에서 관리하므로 여기서는 삭제했습니다. */}
 
       <main className="max-w-7xl mx-auto py-16 px-6 md:px-10">
+        {/* 상단 타이틀 섹션 */}
         <div className="flex justify-between items-end mb-12">
           <h2 className="text-3xl font-black text-slate-800 tracking-tight italic">
             Feed.
@@ -76,7 +55,7 @@ export default function MainPage() {
           </button>
         </div>
 
-        {/* 피드 그리드 */}
+        {/* 피드 그리드 레이아웃 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {epigrams.map((item) => (
             <div
@@ -85,6 +64,7 @@ export default function MainPage() {
               onClick={() => setSelectedEpigram(item)}
             >
               <div className="bg-white rounded-[40px] shadow-sm border border-slate-100 aspect-[16/10] p-10 md:p-12 flex flex-col justify-between relative overflow-hidden transition-all hover:shadow-2xl hover:border-blue-100">
+                {/* 카드 배경 디테일 (노트 줄 간격 느낌) */}
                 <div
                   className="absolute inset-0 opacity-[0.03] pointer-events-none"
                   style={{
@@ -121,7 +101,7 @@ export default function MainPage() {
         </div>
       </main>
 
-      {/* 이미지 카드 상세 보기 모달 */}
+      {/* 카드 상세 보기 모달 */}
       {selectedEpigram && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[100] p-6">
           <div className="relative w-full max-w-[480px] animate-in fade-in zoom-in duration-300">
@@ -132,6 +112,7 @@ export default function MainPage() {
               닫기 ✕
             </button>
 
+            {/* 실제 이미지로 저장될 영역 */}
             <div
               id="epigram-card"
               className="relative aspect-square w-full bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] rounded-[40px] p-12 flex flex-col justify-center items-center text-center shadow-2xl overflow-hidden"
@@ -151,8 +132,8 @@ export default function MainPage() {
               </p>
             </div>
 
-            <div className="mt-8 flex gap-4">
-              <button className="flex-1 h-18 bg-white rounded-[24px] font-black text-[#0F172A] text-lg shadow-xl active:scale-95 transition-all">
+            <div className="mt-8">
+              <button className="w-full h-18 bg-white rounded-[24px] font-black text-[#0F172A] text-lg shadow-xl active:scale-95 transition-all py-4">
                 📥 이미지로 저장하기
               </button>
             </div>

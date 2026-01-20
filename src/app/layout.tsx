@@ -4,7 +4,6 @@ import { Logo } from "@/components/common/Logo";
 import Link from "next/link";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
-// React Query 관련 임포트
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -13,7 +12,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // QueryClient는 렌더링 시마다 새로 생성되지 않도록 useState로 관리합니다.
   const [queryClient] = useState(() => new QueryClient());
 
   return (
@@ -21,10 +19,12 @@ export default function RootLayout({
       <body>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            {/* 공통 네비게이션 바 */}
-            <nav className="h-20 px-6 md:px-10 flex items-center justify-between border-b border-slate-50 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+            {/* 공통 헤더: z-50과 bg-white를 확실히 주어 겹침 방지 */}
+            <nav className="h-20 px-6 md:px-10 flex items-center justify-between border-b border-slate-50 bg-white sticky top-0 z-[100]">
               <div className="scale-90 origin-left">
-                <Logo />
+                <Link href="/">
+                  <Logo />
+                </Link>
               </div>
               <div className="flex gap-4">
                 <Link
@@ -42,8 +42,8 @@ export default function RootLayout({
               </div>
             </nav>
 
-            {/* 각 페이지 컨텐츠 */}
-            {children}
+            {/* 실제 페이지 내용 */}
+            <main>{children}</main>
           </AuthProvider>
         </QueryClientProvider>
       </body>
