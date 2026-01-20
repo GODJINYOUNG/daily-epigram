@@ -2,35 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-[#0F172A]">
-      {/* 0. 상단 네비게이션 - 중복 제거 및 최적화 버전 */}
-      <nav className="flex items-center justify-between px-10 py-8 max-w-7xl mx-auto">
-        <Link
-          href="/"
-          className="text-3xl font-[1000] italic tracking-tighter text-[#0F172A]"
-        >
-          Epigram.
-        </Link>
-        <div className="flex gap-6 items-center">
-          <Link
-            href="/login"
-            className="text-lg font-bold text-slate-500 hover:text-black transition-colors"
-          >
-            로그인
-          </Link>
-          <Link
-            href="/signup"
-            className="bg-[#0F172A] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
-          >
-            시작하기
-          </Link>
-        </div>
-      </nav>
-
       {/* 1. 메인 히어로 섹션 */}
       <section className="pt-24 pb-40 px-6 text-center max-w-4xl mx-auto">
         <h2 className="text-[28px] md:text-[32px] font-bold text-slate-400 mb-6 tracking-tight">
@@ -52,11 +27,10 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* 2. 특징 섹션 1 (이미지 좌측, 텍스트 우측) */}
+      {/* 2. 특징 섹션 (이미지 좌측) */}
       <section className="bg-white py-40 px-6 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-16 md:gap-24">
           <div className="md:flex-1 w-full aspect-video bg-slate-50 rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center overflow-hidden">
-            {/* 실제 이미지가 있다면 Image 컴포넌트 사용, 없으면 아래처럼 배경색 유지 */}
             <div className="text-slate-200 font-bold">IMAGE AREA</div>
           </div>
           <div className="md:flex-1 text-left">
@@ -73,7 +47,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. 특징 섹션 2 (텍스트 좌측, 이미지 우측) */}
+      {/* 3. 특징 섹션 (텍스트 좌측) */}
       <section className="bg-white py-40 px-6 max-w-6xl mx-auto border-t border-slate-50">
         <div className="flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24">
           <div className="md:flex-1 w-full aspect-video bg-slate-50 rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center overflow-hidden">
@@ -94,7 +68,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. 푸터 섹션 */}
+      {/* 4. 하단 푸터 로고 섹션 */}
       <section className="bg-[#F8FAFC] py-48 text-center border-t border-slate-100">
         <h1 className="text-[60px] md:text-[80px] font-[1000] tracking-tighter mb-4 text-[#0F172A]">
           언제나
