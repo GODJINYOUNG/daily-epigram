@@ -1,64 +1,78 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "./Logo";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Header() {
+export function Header() {
+  const { user, logout } = useAuth();
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // 컴포넌트 마운트 시 토큰 확인
+  // 하이드레이션 오류 방지 (클라이언트 렌더링 확인)
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token);
+    setMounted(true);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken"); // 토큰 삭제
-    setIsLoggedIn(false);
-    alert("로그아웃 되었습니다.");
-    router.push("/");
-    router.refresh(); // 변경된 인증 상태를 전체 페이지에 반영
+    logout();
+    window.location.href = "/"; // 상태 초기화를 위해 href 사용
   };
 
-  return (
-    <header className="flex justify-between items-center py-4 px-6 border-b">
-      <Link href="/" className="text-xl font-bold">
-        Daily Epigram
-      </Link>
+  if (!mounted)
+    return (
+      <nav className="h-20 px-6 md:px-10 flex items-center justify-between border-b border-slate-50 bg-white sticky top-0 z-[100]">
+        <div className="scale-90 origin-left">
+          <Logo />
+        </div>
+      </nav>
+    );
 
-      <nav className="flex gap-4 items-center">
-        {isLoggedIn ? (
+  return (
+    <nav className="h-20 px-6 md:px-10 flex items-center justify-between border-b border-slate-50 bg-white sticky top-0 z-[100]">
+      <div className="scale-90 origin-left">
+        <Link href="/">
+          <Logo />
+        </Link>
+      </div>
+
+      <div className="flex gap-4 items-center">
+        {user ? (
           <>
-            <Link
-              href="/create"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              에피그램 만들기
-            </Link>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-xs font-black text-slate-500 border border-slate-200">
+                {user.nickname?.[0] || "U"}
+              </div>
+              <span className="text-sm font-bold text-slate-700 hidden md:block">
+                {user.nickname}님
+              </span>
+            </div>
             <button
               onClick={handleLogout}
-              className="text-sm text-gray-500 hover:text-black"
+              className="text-sm font-bold text-red-500 px-4 py-2 hover:bg-red-50 rounded-xl transition-colors"
             >
               로그아웃
             </button>
-            {/* 여기에 나중에 유저 프로필 아이콘을 추가할 예정입니다 */}
           </>
         ) : (
           <>
-            <Link href="/login" className="text-sm font-medium">
+            <Link
+              href="/login"
+              className="text-sm font-bold text-slate-600 px-4 py-2"
+            >
               로그인
             </Link>
             <Link
               href="/signup"
-              className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg"
+              className="text-sm font-bold bg-[#2B2B2B] text-white px-5 py-2 rounded-xl hover:bg-black transition-colors"
             >
               시작하기
             </Link>
           </>
         )}
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 }
