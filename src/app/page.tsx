@@ -2,27 +2,38 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image"; // Image 컴포넌트 사용을 위해 임포트
+import Image from "next/image";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-[#0F172A]">
-      {/* 0. 상단 네비게이션 */}
+      {/* 0. 상단 네비게이션 - 중복 제거 및 최적화 버전 */}
       <nav className="flex items-center justify-between px-10 py-8 max-w-7xl mx-auto">
-        <span className="text-3xl font-[1000] italic tracking-tighter">
-          Epigram.
-        </span>
         <Link
-          href="/login"
-          className="text-lg font-bold text-slate-600 hover:text-black transition-colors"
+          href="/"
+          className="text-3xl font-[1000] italic tracking-tighter text-[#0F172A]"
         >
-          로그인
+          Epigram.
         </Link>
+        <div className="flex gap-6 items-center">
+          <Link
+            href="/login"
+            className="text-lg font-bold text-slate-500 hover:text-black transition-colors"
+          >
+            로그인
+          </Link>
+          <Link
+            href="/signup"
+            className="bg-[#0F172A] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+          >
+            시작하기
+          </Link>
+        </div>
       </nav>
 
-      {/* 1. 메인 히어로 섹션 (시안 상단 "나만 알고싶기엔 아까운 글이 있지 않나요?") */}
+      {/* 1. 메인 히어로 섹션 */}
       <section className="pt-24 pb-40 px-6 text-center max-w-4xl mx-auto">
-        <h2 className="text-[28px] md:text-[32px] font-bold text-slate-400 mb-6">
+        <h2 className="text-[28px] md:text-[32px] font-bold text-slate-400 mb-6 tracking-tight">
           나만 알고 싶기엔
         </h2>
         <h1 className="text-[48px] md:text-[64px] font-[1000] leading-tight tracking-tight mb-8">
@@ -33,29 +44,22 @@ export default function LandingPage() {
           작성해보세요.
         </p>
 
-        {/* '에피그램 시작하기' 버튼 */}
         <Link
           href="/signup"
-          className="inline-flex items-center justify-center h-18 px-12 rounded-[24px] bg-blue-600 text-white text-xl font-black shadow-xl hover:-translate-y-1 hover:bg-blue-700 transition-all duration-300"
+          className="inline-flex items-center justify-center h-18 px-12 py-5 rounded-[24px] bg-blue-600 text-white text-xl font-black shadow-xl shadow-blue-100 hover:-translate-y-1 hover:bg-blue-700 transition-all duration-300"
         >
           에피그램 시작하기
         </Link>
       </section>
 
-      {/* 2. 첫 번째 특징 섹션 (시안 좌측 이미지, 우측 텍스트) */}
+      {/* 2. 특징 섹션 1 (이미지 좌측, 텍스트 우측) */}
       <section className="bg-white py-40 px-6 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-16 md:gap-24">
-          <div className="md:flex-1 w-full relative h-[300px] md:h-[400px] bg-slate-50 rounded-3xl shadow-lg border border-slate-100 flex items-center justify-center overflow-hidden">
-            {/* 시안 이미지 1 대체 (실제 이미지 경로로 변경 필요) */}
-            <Image
-              src="/placeholder-image-1.png" // 실제 이미지 경로로 변경
-              alt="글 공유 미리보기"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-3xl"
-            />
+          <div className="md:flex-1 w-full aspect-video bg-slate-50 rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center overflow-hidden">
+            {/* 실제 이미지가 있다면 Image 컴포넌트 사용, 없으면 아래처럼 배경색 유지 */}
+            <div className="text-slate-200 font-bold">IMAGE AREA</div>
           </div>
-          <div className="md:flex-1 text-left md:ml-12">
+          <div className="md:flex-1 text-left">
             <h3 className="text-4xl font-black mb-6 leading-tight">
               타인이나 내가 쓴<br />
               소중한 글을 공유해요.
@@ -69,20 +73,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. 두 번째 특징 섹션 (시안 좌측 텍스트, 우측 이미지) */}
-      <section className="bg-white py-40 px-6 max-w-6xl mx-auto">
+      {/* 3. 특징 섹션 2 (텍스트 좌측, 이미지 우측) */}
+      <section className="bg-white py-40 px-6 max-w-6xl mx-auto border-t border-slate-50">
         <div className="flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24">
-          <div className="md:flex-1 w-full relative h-[300px] md:h-[400px] bg-slate-50 rounded-3xl shadow-lg border border-slate-100 flex items-center justify-center overflow-hidden">
-            {/* 시안 이미지 2 대체 (실제 이미지 경로로 변경 필요) */}
-            <Image
-              src="/placeholder-image-2.png" // 실제 이미지 경로로 변경
-              alt="감정 분석 통계"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-3xl"
-            />
+          <div className="md:flex-1 w-full aspect-video bg-slate-50 rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center overflow-hidden">
+            <div className="text-slate-200 font-bold">IMAGE AREA</div>
           </div>
-          <div className="md:flex-1 text-left md:mr-12">
+          <div className="md:flex-1 text-left">
             <h3 className="text-4xl font-black mb-6 leading-tight">
               나만의 통계로
               <br />
@@ -97,12 +94,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. 마지막 푸터 문구 섹션 */}
-      <section className="bg-[#F8FAFC] py-40 text-center">
-        <h1 className="text-[60px] font-[1000] tracking-tighter mb-4">
+      {/* 4. 푸터 섹션 */}
+      <section className="bg-[#F8FAFC] py-48 text-center border-t border-slate-100">
+        <h1 className="text-[60px] md:text-[80px] font-[1000] tracking-tighter mb-4 text-[#0F172A]">
           언제나
         </h1>
-        <h1 className="text-[60px] font-[1000] tracking-tighter text-blue-600">
+        <h1 className="text-[60px] md:text-[80px] font-[1000] tracking-tighter text-blue-600">
           에피그램
         </h1>
       </section>
